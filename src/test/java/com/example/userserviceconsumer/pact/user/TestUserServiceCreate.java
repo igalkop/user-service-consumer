@@ -1,4 +1,4 @@
-package com.example.userserviceconsumer.pact;
+package com.example.userserviceconsumer.pact.user;
 
 import au.com.dius.pact.consumer.Pact;
 import au.com.dius.pact.consumer.PactProviderRuleMk2;
@@ -10,22 +10,14 @@ import au.com.dius.pact.model.RequestResponsePact;
 import com.example.userserviceconsumer.domain.User;
 import com.example.userserviceconsumer.domain.UserCreatedResponse;
 import com.example.userserviceconsumer.utils.CommunicationUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
-import org.joda.time.DateTime;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import static com.example.userserviceconsumer.pact.PactConstants.USER_SERVICE_CREATE_USER_CONSUMER_HTTP;
 import static com.example.userserviceconsumer.pact.PactConstants.USER_SERVICE_PROVIDER_HTTP;
@@ -62,7 +54,7 @@ public class TestUserServiceCreate {
                 .status(HttpStatus.CREATED.value())
                 .body(responseCreateUser)
                 .given("user 9876 already exists")
-                .uponReceiving("create user request")
+                .uponReceiving("create user request when user already exists")
                 .path("/user")
                 .headers(headers)
                 .body(userBody2)

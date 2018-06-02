@@ -1,4 +1,4 @@
-package com.example.userserviceconsumer.pact;
+package com.example.userserviceconsumer.pact.user;
 
 import au.com.dius.pact.consumer.Pact;
 import au.com.dius.pact.consumer.PactProviderRuleMk2;
@@ -13,14 +13,11 @@ import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.userserviceconsumer.pact.PactConstants.REGEX_NON_EMPTY_STRING;
-import static com.example.userserviceconsumer.pact.PactConstants.USER_SERVICE_GET_USER_CONSUMER_HTTP;
-import static com.example.userserviceconsumer.pact.PactConstants.USER_SERVICE_PROVIDER_HTTP;
+import static com.example.userserviceconsumer.pact.PactConstants.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 public class TestUserServiceGet {
@@ -52,13 +49,12 @@ public class TestUserServiceGet {
                 .headers(headers)
                 .body(body)
                 .given("user 9999 does NOT  exists")
-                .uponReceiving("get user request")
+                .uponReceiving("get non-existing user request")
                 .path("/user/9999")
                 .method("GET")
                 .willRespondWith()
                 .status(404)
                 .headers(headers)
-//                .body("")
                 .toPact();
 
     }
@@ -67,16 +63,22 @@ public class TestUserServiceGet {
     @PactVerification(USER_SERVICE_PROVIDER_HTTP)
     public void testCreateUser() {
 
-
+        // given
         User user = new User(1111, "first", "last");
         CommunicationUtils communicationUtils = new CommunicationUtils(mockProvider.getUrl() + "/user/" );
+
+        // when
         ResponseEntity<User> responoseUser1234 = communicationUtils.getUser("1111");
+
+        // then
         assertThat(responoseUser1234.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responoseUser1234.getBody()).isEqualTo(user);
 
-
-        String userNotExistsId = "9999";
         try {
+            // given
+            String userNotExistsId = "9999";
+
+            // when
             communicationUtils.getUser(userNotExistsId);
         } catch (HttpClientErrorException e) {
             assertThat(e.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);

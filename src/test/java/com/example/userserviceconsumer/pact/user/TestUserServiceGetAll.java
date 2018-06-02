@@ -1,4 +1,4 @@
-package com.example.userserviceconsumer.pact;
+package com.example.userserviceconsumer.pact.user;
 
 import au.com.dius.pact.consumer.Pact;
 import au.com.dius.pact.consumer.PactProviderRuleMk2;
@@ -10,22 +10,16 @@ import au.com.dius.pact.model.RequestResponsePact;
 import com.example.userserviceconsumer.domain.User;
 import com.example.userserviceconsumer.domain.Users;
 import com.example.userserviceconsumer.utils.CommunicationUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import static com.example.userserviceconsumer.pact.PactConstants.REGEX_NON_EMPTY_STRING;
-import static com.example.userserviceconsumer.pact.PactConstants.USER_SERVICE_GET_ALL_USERS_CONSUMER_HTTP;
-import static com.example.userserviceconsumer.pact.PactConstants.USER_SERVICE_PROVIDER_HTTP;
+import static com.example.userserviceconsumer.pact.PactConstants.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 public class TestUserServiceGetAll {
@@ -52,7 +46,7 @@ public class TestUserServiceGetAll {
 
         return builder
                 .given("user 1111 already exists")
-                .uponReceiving("get user request")
+                .uponReceiving("get all users request")
                 .path("/user/")
                 .method("GET")
                 .willRespondWith()
